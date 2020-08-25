@@ -1,0 +1,90 @@
+﻿@{
+    @*@model IEnumerable<Errand>*@
+    @model IQueryable<Errand>
+    Layout = "_CoordinatorLayout";
+    ViewBag.Title = "Småstads kommun";
+}
+
+
+<div id="content">
+    <h2>Ärenden</h2>
+    <p class="info">Du är inloggad som samordnare</p>
+
+
+    <table id="managerForm">
+        <tr>
+            <td class="label">Välj status:</td>
+            <td class="label">Välj avdelning:</td>
+            <td>&nbsp;</td>
+            <td class="label">Ärendenummer:</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                <select name="status">
+                    <option selected="selected">Välj alla</option>
+
+                    @*plöjer igenom viewbag och skapar en option-tag för varje element*@
+                    @foreach (Status e in ViewBag.Statuses)
+                    {
+                        <option value="@e.StatusName">@e.StatusName</option>
+                    }
+
+
+                    @*<option value="stat0">Inrapporterad</option>*@
+
+                </select>
+            </td>
+            <td>
+                <select name="department">
+                    <option selected="selected">Välj alla</option>
+                    @*samma som ovan*@
+                    @foreach (Department e in ViewBag.DepartmentList)
+                    {
+                        <option value="@e.DepartmentName">@e.DepartmentName</option>
+                    }
+
+                </select>
+            </td>
+            <td><input class="button" type="submit" value="Hämta lista" /></td>
+            <td><input name="casenumber" /></td>
+            <td><input class="button" type="submit" value="Sök" /></td>
+        </tr>
+    </table>
+
+    @* Kallar på view component, dvs tabellen *@
+    @await Component.InvokeAsync("ErrandTable", ViewBag.Controller)
+
+    
+
+    <!--Nedan ser man en lista på ärenden-->
+    @*<table>
+        <tr>
+            <th>Ärende anmält</th>
+            <th>Ärendenummer</th>
+            <th>Miljöbrott</th>
+            <th>Status</th>
+            <th>Avdelning</th>
+            <th>Handläggare</th>
+        </tr>
+        @foreach (var e in Model.Errands)
+        {
+            <tr>
+                <td>@e.DateOfObservation.ToString("yyyy-MM-dd")</td>
+                <td><a asp-controller="Coordinator" asp-action="CrimeCoordinator" asp-route-id="@e.RefNumber">@e.RefNumber</a></td>
+                <td>@e.TypeOfCrime</td>
+
+
+                <td>@e.Status?.StatusName</td>
+                <td>@e.Department?.DepartmentName</td>
+                <td>@e.Employee?.Name</td>
+
+
+
+            </tr>
+
+        }
+    </table>*@
+
+
+

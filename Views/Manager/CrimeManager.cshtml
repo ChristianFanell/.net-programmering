@@ -1,0 +1,77 @@
+﻿@{
+    @model Employee
+    Layout = "_ManagerLayout";
+    ViewBag.Title = "Småstads kommun";
+}
+
+
+<div id="content">
+
+    <h2>Detaljer för ärendet</h2>
+    <p class="info">Du är inloggad som avdelningschef</p>
+    <h3>Ärende: @ViewBag.ID</h3>
+
+    <!--Nedan ser man en lista på ärenden-->
+
+    @*kallar på viewcomponent och skickar in viewbag-värde*@
+    @await Component.InvokeAsync("ErrandDetail", ViewBag.ID)
+
+
+    @*Dropdown-listan som finns på respektive sida hämtar du precis som du hämtat den på Start-sidan (alltså inte omvandla den till en komponent).*@
+<section id="bottomColumn">
+    <h3>Redigera ärende</h3>
+    <form asp-action="EditErrand" asp-controller="Manager">
+        <p>
+            Ange handläggare:
+            <select asp-for="EmployeeId" asp-items="@(new SelectList(ViewBag.ListOfEmployees, "EmployeeId", "Name"))">
+                <option selected="selected">Välj</option>
+            </select>
+        </p>
+        <p>
+            <input asp-for="NoAction"/> Ingen åtgärd: <input asp-for="NotInvestigate"
+                                                                                        value="Ange motivering" />
+        </p>
+        <p><input class="button" type="submit" value="Spara" /></p>
+    </form>
+</section>
+
+    <script>
+
+    //fluffar till det med javascript. väljer man checkbox disablas select och vice verse om select.
+
+    (() => {
+        const selected = document.getElementById("EmployeeId");
+        const saveButton = document.getElementsByClassName("button")[0];
+        const checkBox = document.getElementById('NoAction');
+        let checked = false;
+
+        const toggleChecked = () => checked = !checked;
+
+        saveButton.setAttribute("disabled", "disabled");
+
+        const setButton = e => {
+            if (e.target.value === 'Välj') {
+                saveButton.setAttribute("disabled", "disabled");
+                checkBox.removeAttribute("disabled");
+            }
+            else {
+                saveButton.removeAttribute("disabled");
+                checkBox.setAttribute('disabled', 'disabled');
+            }               
+        }
+
+        checkBox.addEventListener('click', () => {
+            toggleChecked();
+            if (checked) {
+                selected.setAttribute('disabled', 'disabled');
+                saveButton.removeAttribute("disabled");
+            }
+            else {
+                selected.removeAttribute('disabled');
+            }
+        });
+
+        selected.addEventListener("change", setButton);
+    })();
+
+    </script>

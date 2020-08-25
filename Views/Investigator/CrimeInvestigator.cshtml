@@ -1,0 +1,90 @@
+﻿@{
+    @model Errand
+    Layout = "_InvestigatorLayout";
+    ViewBag.Title = "Småstads kommun";
+}
+
+<div id="content">
+    <h2>Detaljer för ärendet</h2>
+    <p class="info">Du är inloggad som handläggare</p>
+    <h3>Ärende: @ViewBag.ID</h3>
+
+
+
+    <!--Nedan ser man en lista på ärenden-->
+    @*viewcomponent*@
+    @await Component.InvokeAsync("ErrandDetail", ViewBag.ID)
+
+    @*Dropdown-listan som finns på respektive sida hämtar du precis som du hämtat den på Start-sidan (alltså inte omvandla den till en komponent).*@
+    <section id="bottomColumn">
+        <h3>Redigera ärende</h3>
+        <form asp-action="SaveInvestigator" asp-controller="Investigator" method="post" enctype="multipart/form-data" multiple>
+            <p>
+                <label asp-for="InvestigatorAction" class="label">Event/aktion:</label><br />
+                <textarea asp-for="InvestigatorAction" rows="5" cols="60"></textarea>
+            </p>
+            <p>
+                <label asp-for="InvestigatorInfo" class="label">Information:</label><br />
+                <textarea asp-for="InvestigatorInfo" rows="5" cols="60"></textarea>
+            </p>
+
+            <p class="label">Prover:</p>
+            <input id="loadSample" type="file" name="loadSample" />
+
+
+            <p class="label">Ladda upp bilder:</p>
+            <input id="loadImage" type="file" name="loadImage" />
+
+            <p class="label">Ändring av status:</p>
+          
+            <select id="StatusId" name="StatusId">
+                <option selected="selected">Välj</option>
+                @foreach(var o in ViewBag.Status)
+                {
+                    if(o.StatusId == "S_C" || o.StatusId == "S_D")
+                    {
+                        <option value="@o.StatusId">@o.StatusName</option>
+                    }
+                    
+                }
+            </select>
+
+            <p>
+                <input class="button" type="submit" value="Spara ändringarna" />
+            </p>
+        </form>
+    </section>
+
+<script>
+    (() => {
+        const selected = document.getElementById("StatusId");
+        const saveButton = document.getElementsByClassName("button")[0];
+        const loadImage = document.getElementById('loadImage');
+        const loadSample = document.getElementById('loadSample');
+        const InvestigatorAction = document.getElementById('InvestigatorAction');
+        const InvestigatorInfo = document.getElementById('InvestigatorInfo');
+
+        const checkForm = e => {
+            if (
+                e.target.value
+                && e.target.value !== 'Välj'
+                && e.target.value !== ''
+            ) {
+                saveButton.removeAttribute('disabled')
+            }
+            else {
+                saveButton.setAttribute("disabled", "disabled");
+            }           
+        }            
+
+        saveButton.setAttribute("disabled", "disabled");
+
+        // events
+        loadSample.addEventListener('change', checkForm);
+        loadImage.addEventListener('change', checkForm);
+        selected.addEventListener('change', checkForm);
+        InvestigatorAction.addEventListener('input', checkForm);
+        InvestigatorInfo.addEventListener('input', checkForm);
+    })();
+
+</script>

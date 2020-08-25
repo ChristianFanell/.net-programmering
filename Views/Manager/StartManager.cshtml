@@ -1,0 +1,93 @@
+﻿@{
+    @model IQueryable<Errand>
+    Layout = "_ManagerLayout";
+    ViewBag.Title = "Småstads kommun";
+}
+
+    <div id="content">
+        <h2>Ärenden</h2>
+        <p class="info">Du är inloggad som avdelningschef (hej @ViewBag.UserName)</p>
+        <a asp-controller="Investigator" asp-action="StartInvestigator">Test</a>
+
+        <table id="managerForm">
+            <tr>
+                <td class="label">Välj status:</td>
+                <td class="label">Välj handläggare:</td>
+                <td>&nbsp;</td>
+                <td class="label">Ärendenummer:</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="status">
+                        <option selected="selected">Välj alla</option>
+                        @*skriver ut options för selectlistan baserat på modellen*@
+                        @foreach (var e in ViewBag.Statuses)
+                        {
+                            <option value="@e.StatusName">@e.StatusName</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <select name="investigator">
+                        <option selected="selected">Välj alla</option>
+                        @*skriver ut options för selectlistan baserat på modellen*@
+                        @foreach (var e in ViewBag.Employees)
+                        {
+                            <option value="@e.Name">@e.Name</option>
+                        }
+                    </select>
+                </td>
+                <td><input class="button" type="submit" value="Hämta lista" /></td>
+                <td><input name="casenumber" /></td>
+                <td><input class="button" type="submit" value="Sök" /></td>
+            </tr>
+        </table>
+
+        @*VIEWCOMPONENT för tabell*@
+        @await Component.InvokeAsync("ErrandTable", ViewBag.Controller)
+
+        <!--Nedan ser man en lista på ärenden-->
+        @*<table>
+        <tr>
+            <th>Ärende anmält</th>
+            <th>Ärendenummer</th>
+            <th>Miljöbrott</th>
+            <th>Status</th>
+            <th>Avdelning</th>
+            <th>Handläggare</th>
+        </tr>*@
+        @*@foreach (Errand e in Model.GetManagerErrands)
+            {
+                <tr>
+                    <td>@e.DateOfObservation.ToString("yyyy-MM-dd")</td>
+                    <td><a asp-controller="@ViewBag.Controller" asp-action="CrimeManager" asp-route-id="@e.RefNumber">@e.RefNumber</a></td>
+                    <td>@e.TypeOfCrime</td>
+                    <td>@e.Status?.StatusName</td>
+
+
+                    @if (!String.IsNullOrEmpty(e.Department?.DepartmentName))
+                    {
+                        <td>@e.Department.DepartmentName</td>
+                    }
+                    else
+                    {
+                        <td>Ej tillsatt</td>
+                    }
+
+
+                    @if (!String.IsNullOrEmpty(e.Employee?.Name))
+                    {
+                        <td>@e.Employee?.Name</td>
+                    }
+                    else
+                    {
+                        <td>Ej tillsatt</td>
+                    }
+
+                </tr>
+
+            }
+        </table>*@
+
+

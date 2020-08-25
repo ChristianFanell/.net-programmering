@@ -1,0 +1,55 @@
+﻿@{
+    @*@model IErrandRep*@
+    @model Department
+    Layout = "_CoordinatorLayout";
+    ViewBag.Title = "Småstads kommun";
+}
+
+<div id="content">
+    <h2>Detaljer för ärendet</h2>
+    <p class="info">Du är inloggad som samordnare</p>
+    <h3>Ärende: @ViewBag.ID</h3> 
+
+    @*viewcomponent som kallas med vy-sida och id som skickats från controller*@
+    @await Component.InvokeAsync("ErrandDetail", ViewBag.ID)
+
+
+    @*Dropdown-listan som finns på respektive sida hämtar du precis som du hämtat den på Start-sidan (alltså inte omvandla den till en komponent).*@
+    <section id="bottomColumn">
+        <h3>Redigera ärende</h3>
+        <form asp-controller="Coordinator" asp-action="SaveDepartment">
+            <p>
+                Ange enhet:
+                @*kan man skita i asp-for?*@
+                <select asp-for="DepartmentId" asp-items="@(new SelectList(ViewBag.ListOfDepartments, "DepartmentId", "DepartmentName"))">
+                    <option selected="selected">Välj</option>
+                </select>
+            </p>
+            @*<p>
+                <input type="checkbox" name="noAction" value="true" /> Ingen åtgärd: <input type="text" name="reason"
+                                                                                            value="Ange motivering" />
+            </p>*@
+            <p><input class="button" type="submit" value="Spara" /></p>
+        </form>
+       
+
+    </section>
+
+@* Fuskar med javascript: Om "Välj" eller "Småstads kommun" är vald sätter jag spara-knappen som disabled *@
+<script>
+    (() => {
+        const selected = document.getElementById("DepartmentId");
+        const saveButton = document.getElementsByClassName("button")[0];
+
+        saveButton.setAttribute("disabled", "disabled");
+
+        const setButton = e => {
+            e.target.value === 'Välj' || e.target.value === 'D00' ?
+                saveButton.setAttribute("disabled", "disabled")
+                : saveButton.removeAttribute("disabled");
+        }
+
+        selected.addEventListener("change", setButton);        
+    })();
+   
+</script>

@@ -1,0 +1,53 @@
+﻿
+@{
+    @model IQueryable<Errand>
+}
+@if (Model.Count() < 1)
+{   
+    <p>Din ärendelista är tom</p> 
+}
+
+else {
+<!--Nedan ser man en lista på ärenden-->
+<table>
+    <tr>
+        <th>Ärende anmält</th>
+        <th>Ärendenummer</th>
+        <th>Miljöbrott</th>
+        <th>Status</th>
+        <th>Avdelning</th>
+        <th>Handläggare</th>
+    </tr>
+
+
+    @foreach (Errand e in Model)
+    {
+        <tr>
+            <td>@e.DateOfObservation.ToString("yyyy-MM-dd")</td>
+            <td><a asp-controller="@ViewBag.Controller" asp-action=@ViewBag.Action asp-route-id="@e.RefNumber">@e.RefNumber</a></td>
+            <td>@e.TypeOfCrime</td>
+            <td>@e.Status?.StatusName</td>
+
+
+            @if (!String.IsNullOrEmpty(e.Department?.DepartmentName))
+            {
+                <td>@e.Department.DepartmentName</td>
+            }
+            else
+            {
+                <td>Ej tillsatt</td>
+            }
+
+
+            @if (!String.IsNullOrEmpty(e.Employee?.Name))
+            {
+                <td>@e.Employee?.Name</td>
+            }
+            else
+            {
+                <td>Ej tillsatt</td>
+            }
+        </tr>
+    }
+</table>
+}

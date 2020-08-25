@@ -1,0 +1,48 @@
+﻿@{
+    @model Errand
+    Layout = "_CoordinatorLayout";
+    ViewBag.Title = "Småstads kommun";
+}
+
+<div id="content">
+    <h2>Rapportera brott</h2>
+    <p class="info">Du är inloggad som samordnare</p>
+
+    <p>Fyll i formuläret nedan, alla rutor markerade med stjärna (*) måste fyllas i</p>
+    <form method="post" asp-controller="Coordinator" asp-action="Validate">
+        <p>
+            <input type="hidden" name="isSubmitted" value="true" />
+        </p>
+        <p>
+            <label asp-for="Place" class="label">Plats för brottet:</label><br />
+            <input asp-for="Place" /> *
+            <span asp-validation-for="Place"></span>
+        </p>
+        <p>
+            <label asp-for="TypeOfCrime" class="label">Typ av brott:</label><br />
+            <input asp-for="TypeOfCrime" /> *
+            <span asp-validation-for="TypeOfCrime"></span>
+        </p>
+        <p>
+            <label asp-for="DateOfObservation" class="label">Datum:</label><br />
+            <input asp-for="DateOfObservation" /> *
+            <span asp-validation-for="DateOfObservation"></span>
+        </p>
+        <p>
+            <label asp-for="InformerName" class="label">Ditt namn:</label><br />
+            <input asp-for="InformerName" /> *
+            <span asp-validation-for="InformerName"></span>
+        </p>
+        <p>
+            <label asp-for="InformerPhone" class="label">Ditt telefonnummer:</label><br />
+            <input asp-for="InformerPhone" /> *
+            <span asp-validation-for="InformerPhone"></span>
+        </p>
+        <p>
+            <label asp-for="Observation" class="label">Beskriv din observation:</label><br />
+            <textarea asp-for="Observation" rows="5" cols="16"></textarea>
+        </p>
+        <p>
+            <input class="button" type="submit" value="Skicka in" />
+        </p>
+    </form>

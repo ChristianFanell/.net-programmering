@@ -1,0 +1,104 @@
+﻿
+@{
+    @model Errand
+}
+
+@*ViewComponent, visar upp date efter model*@
+    <section id="leftColumn">
+        <h3>Anmälan</h3>
+        <p>@ViewBag.Action</p>
+        <p>
+            <span class="label">Typ av brott: </span><br />
+            @Model.TypeOfCrime
+        </p>
+        <p>
+            <span class="label">Brottsplats: </span><br />
+            @Model.Place
+        </p>
+        <p>
+            <span class="label">Brottsdatum: </span><br />
+            @Model.DateOfObservation.ToString("yyyy-MM-dd")
+        </p>
+        <p>
+            <span class="label">Anmälare: </span><br />
+            @Model.InformerName
+        </p>
+        <p>
+            <span class="label">Telefon: </span><br />
+            @Model.InformerPhone
+        </p>
+        <p>
+            <span class="label">Observationer:</span><br />
+            @Model.Observation
+        </p>
+    </section>
+
+<section id="rightColumn">
+    <h3>Utredning</h3>
+    <p>
+        <span class="label">Status:</span><br />
+        @Model.Status?.StatusName
+    </p>
+    <p>
+        <span class="label">Ansvarig avdelning: </span><br />
+        @Model.Department?.DepartmentName
+    </p>
+    <p>
+        <span class="label">Handläggare: </span><br />
+        @Model.Employee?.Name
+    </p>
+    <p>
+        <span class="label">Provtagning: </span><br />
+        @if (Model.Samples.Count > 0)
+        {
+            @foreach (var sam in Model.Samples)
+            {
+                <a href="~/uploads/@sam.SampleName">@sam.SampleName</a>
+            }
+        }
+        else
+        {
+        <p>Ärendet har inga filer.</p>
+        }
+
+        </p>
+        <p>
+            <span class="label">Ytterligare information: </span><br />
+            @Model.InvestigatorInfo
+        </p>
+        <p>
+            <span class="label">Händelser: </span><br />
+            @Model.InvestigatorAction
+        </p>
+        <p>
+            <span class="label">Bilder: </span><br />
+            @if (Model.Pictures.Count > 0)
+            {
+                @foreach (var img in Model.Pictures)
+                {
+                    <a href="~/uploadsImg/@img.PictureName"><img class="bild-lista" alt="klicka på bilden" src="~/uploadsImg/@img.PictureName" /></a>
+                }
+            }
+            else
+            {
+            <p>Ärendet har inga bilder.</p>
+        }
+            @*<img src="~/images/imagetest.jpg" alt="klicka på bilden" />*@
+
+            </p>
+        </section>
+
+
+        @*public string ErrandID {get; set;}
+        public string Place { get; set; }
+        public string TypeOfCrime { get; set; }
+        public DateTime DateOfObservation { get; set; }
+        public string Observation { get; set; }
+        public string InvestigatorInfo { get; set; }
+        public string InvestigatorAction { get; set; }
+        public string InformerName { get; set; }
+        public string InformerPhone { get; set; }
+        public string StatusId { get; set; }
+        public string DepartmentId { get; set; }
+        public string EmployeeId { get; set; }*@
+
